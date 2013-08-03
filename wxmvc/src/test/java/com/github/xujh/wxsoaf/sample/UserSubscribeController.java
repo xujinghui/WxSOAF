@@ -3,8 +3,6 @@
  */
 package com.github.xujh.wxsoaf.sample;
 
-import org.springframework.web.servlet.ModelAndView;
-
 import com.github.xujh.wxsoaf.annotation.RequestType;
 import com.github.xujh.wxsoaf.stereotype.RequestMapping;
 import com.github.xujh.wxsoaf.stereotype.WxController;
@@ -13,24 +11,24 @@ import com.github.xujh.wxsoaf.stereotype.WxController;
  * @author stevenxu
  * 
  */
-@WxController
+@WxController(type = RequestType.text)
 public class UserSubscribeController {
 
-	@RequestMapping(value = "hello", type = RequestType.text)
-	public String showHello() {
+    @RequestMapping(value = "hello")
+    public String showHello() {
 
-		return "m";
-	}
+        return "m";
+    }
 
-	@RequestMapping(value = "m", type = RequestType.text)
-	public ModelAndView showMessage() {
+    @RequestMapping(value = "m")
+    public String showMessage() {
 
-		return "redirect:";
-	}
+        return "redirect:";
+    }
 
-	@RequestMapping(value = "helloworld", type = RequestType.text)
-	public String showHelloworld() {
+    @RequestMapping(value = "helloworld")
+    public String showHelloworld() {
 
-		return "redirect:hello";
-	}
+        return "redirect:hello";
+    }
 }

@@ -9,10 +9,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.web.bind.annotation.Mapping;
-
-import com.github.xujh.wxsoaf.annotation.RequestType;
-
 /**
  * @author stevenxu
  * 
@@ -20,10 +16,9 @@ import com.github.xujh.wxsoaf.annotation.RequestType;
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Mapping
 public @interface RequestMapping {
 
 	String[] value() default {};
 
-	RequestType[] type() default {};
+	MatchType[] match() default {};
 }

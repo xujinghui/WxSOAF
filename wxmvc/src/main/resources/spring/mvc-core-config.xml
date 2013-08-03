@@ -1,63 +1,166 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    - DispatcherServlet application context for PetClinic's web tier.
--->
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/mvc
+<!-- - DispatcherServlet application context for PetClinic's web tier. -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- <import resource="mvc-view-config.xml"/> - POJOs labeled with the @Controller and @Service annotations are auto-detected. -->
+	<context:component-scan base-package="com.github.xujh.wxsoaf" />
+	<context:property-placeholder location="classpath:spring-jdbc.properties" />
 
-    <import resource="mvc-view-config.xml"/>
+	<!-- <mvc:annotation-driven conversion-service="conversionService"/> all resources inside folder src/main/webapp/resources 
+		are mapped so they can be refered to inside JSP files (see header.jsp for more details) -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
 
-    <!--
-        - POJOs labeled with the @Controller and @Service annotations are auto-detected.
-    -->
-    <context:component-scan
-            base-package="com.github.xujh.wxsoaf"/>
+	<!-- uses WebJars so Javascript and CSS libs can be declared as Maven dependencies (Bootstrap, jQuery...) -->
+	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
 
-    <mvc:annotation-driven conversion-service="conversionService"/>
+	<mvc:view-controller path="/" view-name="welcome" />
 
-    <!--  all resources inside folder src/main/webapp/resources are mapped so they can be refered to inside JSP files
-        (see header.jsp for more details) -->
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
+	<!-- <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"> <property 
+		name="formatters"> <set> <bean class="org.springframework.samples.petclinic.web.PetTypeFormatter"/> </set> </property> </bean> 
+		- Message source for this context, loaded from localized "messages_xx" files. - Files are stored inside src/main/resources -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" p:basename="messages/messages" />
 
-    <!-- uses WebJars so Javascript and CSS libs can be declared as Maven dependencies (Bootstrap, jQuery...) -->
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+	<bean id="typeSelector" class="com.github.xujh.wxsoaf.mvc.DefaultProtocolTypeSelector">
+	</bean>
 
-    <mvc:view-controller path="/" view-name="welcome" />
+	<bean id="handlerSelector" class="com.github.xujh.wxsoaf.mvc.DefaultProcessHandlerSelector">
+		<property name="mappings">
+			<map>
+				<entry key="text">
+					<ref bean="simpleTextHandlerWrapper" />
+				</entry>
+				<entry key="default">
+					<ref bean="defaultHandlerWrapper" />
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="formatters">
-            <set>
-                <bean class="org.springframework.samples.petclinic.web.PetTypeFormatter"/>
-            </set>
-        </property>
-    </bean>
+	<bean id="simpleTextHandlerWrapper" class="com.github.xujh.wxsoaf.mvc.impl.SimpleTextHandlerWrapper">
+		<property name="handlers">
+			<list>
+				<ref bean="equalsTextHandler" />
+				<ref bean="startwithTextHandler" />
+			</list>
+		</property>
+	</bean>
 
-    <!--
-        - Message source for this context, loaded from localized "messages_xx" files.
-        - Files are stored inside src/main/resources
-    -->
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
-          p:basename="messages/messages"/>
+	<bean id="equalsTextHandler" class="com.github.xujh.wxsoaf.mvc.impl.EqualsTextHandler">
+		<property name="mappings">
+			<map>
+				<entry key="m">
+					<ref bean="showMessages" />
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-    <!--
-        - This bean resolves specific types of exceptions to corresponding logical 
-        - view names for error views.
-    -->
-    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <!-- view name resolved using bean of type InternalResourceViewResolver (declared in mvc-view-config.xml) -->
-        <property name="defaultErrorView" value="exception"/>
-        <!-- results into 'WEB-INF/jsp/exception.jsp' -->
-        <property name="warnLogCategory" value="warn"/>
-        <!-- needed otherwise exceptions won't be logged anywhere -->
-    </bean>
+	<bean id="startwithTextHandler" class="com.github.xujh.wxsoaf.mvc.impl.StartwithTextHandler">
+		<property name="mappings">
+			<map>
+				<entry key="2">
+					<ref bean="mediawikiSearchController" />
+				</entry>
+				<entry key="4">
+					<ref bean="oneMp3ResponseController" />
+				</entry>
+				<entry key="5">
+					<ref bean="putAdviceController" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- <bean id="containsUrlMapping" class="com.github.xujh.wxsoaf.servlet.mvc.ContainsTextUrlHandlerMapping"> -->
+	<!-- <property name="mappings"> -->
+	<!-- <props> -->
+	<!-- <prop key="m">showMessages</prop> -->
+	<!-- </props> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<bean id="showMessages" class="com.neusoft.wxkm.view.ShowMessagesController">
+	</bean>
+
+	<bean id="locRegisterController" class="com.neusoft.wxkm.view.LocRegisterController">
+	</bean>
+
+	<bean id="mediawikiSearchController" class="com.neusoft.wxkm.view.MediawikiSearchController">
+	</bean>
+
+	<bean id="putAdviceController" class="com.neusoft.wxkm.view.PutAdviceController">
+	</bean>
+
+	<bean id="oneMp3ResponseController" class="com.neusoft.wxkm.view.OneMp3ResponseController">
+	</bean>
+
+	<bean id="noTypeOrController" class="com.neusoft.wxkm.view.NoTypeOrFoundController">
+	</bean>
+
+	<bean id="userBindServletProxy" class="com.neusoft.wxkm.servlet.ServletProxy.UserBindServletProxy">
+		<property name="userBindService" ref="userBindService" />
+	</bean>
+
+
+	<!-- Service -->
+
+	<bean id="userBindService" class="com.neusoft.wxkm.services.UserBindServiceImpl">
+		<property name="userMapper" ref="userBindMapper" />
+	</bean>
+
+	<bean id="locRegisterService" class="com.neusoft.wxkm.services.LocRegisterServiceImpl">
+		<property name="locationRegisterMapper" ref="locRegisterMapper" />
+	</bean>
+
+	<bean id="adviceService" class="com.neusoft.wxkm.services.AdviceServiceImpl">
+		<property name="adviceMapper" ref="adviceMapper" />
+	</bean>
+
+	<!-- jdbc dataSource -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.user}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- jdbc Factory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-commons-config.xml"></property>
+	</bean>
+
+	<bean id="userBindMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.neusoft.wxkm.mapper.user.UserMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="locRegisterMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.neusoft.wxkm.mapper.locReg.LocationRegisterMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="adviceMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.neusoft.wxkm.mapper.advice.AdviceMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 
 </beans>

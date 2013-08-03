@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.neusoft</groupId>
-	<artifactId>wxkm</artifactId>
+	<groupId>com.github.xujh.wxsoaf</groupId>
+	<artifactId>wxsoaf-wxmvc</artifactId>
 	<version>0.1</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>wxkm</name>
-	<url>http://10.10.125.241/midwiki/</url>
+	<url>http://navigating.blogbus.com</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,7 +29,7 @@
 	</properties>
 
 	<build>
-		<finalName>${artifactId}</finalName>
+		<!-- <finalName>${artifactId}</finalName> -->
 		<resources>
 			<resource>
 				<directory>src/main/java</directory>
@@ -89,8 +89,8 @@
 			<artifactId>unitils-io</artifactId>
 			<version>3.3</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-distribution</artifactId> <version>9.0.4.v20130625</version> 
-			</dependency> -->
+		<!-- <dependency> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-distribution</artifactId> 
+			<version>9.0.4.v20130625</version> </dependency> -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>

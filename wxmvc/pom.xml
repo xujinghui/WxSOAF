@@ -28,21 +28,6 @@
 
 	</properties>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<uniqueVersion>true</uniqueVersion>
-			<id>MID-Maven-Snapshots</id>
-			<name>MID Maven Snapshots Repository</name>
-			<url>http://10.10.125.242:18888/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-		<repository>
-			<uniqueVersion>true</uniqueVersion>
-			<id>MID-Maven-Releases</id>
-			<name>MID Maven Releases Repository</name>
-			<url>http://10.10.125.242:8081/nexus/content/repositories/releases/</url>
-		</repository>
-	</distributionManagement>
-
 	<build>
 		<finalName>${artifactId}</finalName>
 		<resources>

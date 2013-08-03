@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper 
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.wxkm.mapper.user.UserMapper">
+
+<select id="findBind" parameterType="String" resultType="com.neusoft.wxkm.model.User">
+								SELECT 
+									user_alias as userAlias,`name` as name,employee_id as employeeId,email_prefix as emailPrefix,bind_id as bindId
+								FROM `User` 
+								WHERE
+					
+										user_alias=#{userAlias} 
+							
+						
+		
+</select>
+
+<select id="find" parameterType="String" resultType="com.neusoft.wxkm.model.User">
+							SELECT 	ID, 
+									EMAIL as emailPrefix, 
+									NAME, 
+									USER_TYPE, 
+									USER_NUM as employeeId	 
+								FROM 
+									wx_app_db.QM_USER_TAB 
+								where
+									USER_NUM=#{employeeId}
+</select>
+	
+<insert id="insert" parameterType="com.neusoft.wxkm.model.User">
+						<![CDATA[
+							INSERT INTO wx_app_db.User 
+									(
+									user_alias, 
+									NAME, 
+									employee_id, 
+									email_prefix, 
+									bind_id
+									)
+									VALUES
+									(
+									#{userAlias}, 
+									#{name}, 
+									#{employeeId}, 
+									#{emailPrefix}, 
+									#{bindId}
+									);
+					]]>
+					<selectKey resultType="String" keyProperty="bindId" order="AFTER">
+						 <![CDATA[
+								SELECT LAST_INSERT_ID() AS ID
+						 ]]>
+					</selectKey>
+</insert>
+
+</mapper>

@@ -1,0 +1,10 @@
+<xml><ToUserName><![CDATA[gh_eb0bdd2f0d5d]]></ToUserName>
+<FromUserName><![CDATA[ocES7juyDqHhZ7QKi4RvMDoiMWBw]]></FromUserName>
+<CreateTime>1375250468</CreateTime>
+<MsgType><![CDATA[location]]></MsgType>
+<Location_X>41.701631</Location_X>
+<Location_Y>123.437254</Location_Y>
+<Scale>15</Scale>
+<Label><![CDATA[中国辽宁省沈阳市东陵区世纪路37号 邮政编码: 110179]]></Label>
+<MsgId>5906655783868694932</MsgId>
+</xml>

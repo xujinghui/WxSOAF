@@ -50,7 +50,7 @@ public class WeixinTextReqTestCase {
         // sb.append("<MsgId>1234567890123456</MsgId>");
         // sb.append("</xml>");
         // return sb.toString();
-        // getResourceAsStream("com/neusoft/wx/sample/wexin-text-req.txt");
+        // getResourceAsStream("com/../wexin-text-req.txt");
         try {
             InputStream is = WeixinTextReqTestCase.class.getClassLoader().getResourceAsStream(
                     "com/github//xujh/wxsoaf/sample/weixin-text-req.txt");
